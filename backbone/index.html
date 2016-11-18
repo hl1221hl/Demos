@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<button id="new-user">新手报到</button>
+		<ul id="world-list">
+		</ul>
+	</body>
+	<script src="js/jquery-3.1.1.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/underscore-1.8.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/backbone-1.3.3.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		(function($){
+			var UserData = Backbone.Model.extend({
+				//初始化
+				initialize:function(){
+					//监听属性变化
+					this.bind('change:name', function(model, value){
+						console.log('name change to ' + value)
+					});
+					this.bind('invalid', function(model,error){
+						alert(error)
+					})
+				},
+				defaults:{
+					//默认值
+					name: "zhangsan",
+					age:18
+				},
+				validate: function(attrs){
+					if(!attrs.name){
+						return 'name不能为空';
+					}
+				},
+				invalid: function(model,error){
+					alert(error)
+				},
+				//自定义方法
+				aboutMe: function(){
+					return '我叫'+this.get('name') +', 今年'+ this.get('age')+'岁';
+				}
+			});
+			
+			var user = new UserData();
+			console.log(user.aboutMe());
+			var user2 = new UserData();
+			user2.set('name','1');
+			user2.set('name', null);
+			user2.save();
+		})($);
+	</script>
+</html>
